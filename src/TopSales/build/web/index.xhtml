@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Myy tavarasi täällä!</title>
+    </h:head>
+    <h:body>
+        <f:facet name="last">
+            <h:outputStylesheet library="css" name="topsales.css"/>
+        </f:facet>
+        <h:form id="top-sales-form" prependId="false">
+            <p:dataTable value="#{topSalesController.salesItems}" var="item" 
+                         paginator="true" rows="20" selectionMode="single"
+                         selection="#{topSalesController.selectedItem}" rowKey="#{item.id}">             
+                <p:ajax event="rowSelect" process="@this" update=":top-sales-detail-form" oncomplete="PF('marketDialog').show()"/>
+
+                <p:column headerText="Ilmoitukset">
+                    <div class="sales_item">
+                        <div class="thumb_image">
+                            <ui:fragment rendered="#{item.thumbnailUrl != 'none'}">
+                                <img src="#{item.thumbnailUrl}" height="128" width="128" ></img>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{item.thumbnailUrl == 'none'}">
+                                <p:graphicImage library="images" name="ei_kuvaa.png"></p:graphicImage>
+                            </ui:fragment>
+                        </div>
+                        <div class="sales_text">
+                            <h4>
+                                <h:outputText value="#{item.title}" />
+                            </h4>
+                            <br></br>
+                            <h:outputText value="Hinta: " />
+                            <h:outputText value="#{item.priceCents}">
+                                <f:convertNumber currencySymbol="&euro;" currencyCode="EUR" type="currency" locale="FI-fi"/>
+                            </h:outputText>
+                        </div>
+                    </div>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <p:dialog header="Ilmoitus" widgetVar="marketDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <h:form id="top-sales-detail-form">
+                <p:outputPanel id="sales_detail" style="text-align:center;">
+                    <p:panelGrid  columns="2" rendered="#{not empty topSalesController.selectedItem}" columnClasses="label, value">
+                        <f:facet name="header">
+                            <ui:fragment rendered="#{item.thumbnailUrl != 'none'}">
+                                <img src="#{topSalesController.selectedItem.imageUrl}" height="256" width="256"></img>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{item.thumbnailUrl == 'none'}">
+                                <p:graphicImage library="images" name="ei_kuvaa.png"></p:graphicImage>
+                            </ui:fragment>
+                        </f:facet>
+
+                        <h:outputText value="Myynti kohde: " />
+                        <h:outputText value="#{topSalesController.selectedItem.title}"/>
+
+                        <h:outputText value="Kuvaus: " />
+                        <h:outputText value="#{topSalesController.selectedItem.description}" />
+
+                        <h:outputText value="Hinta:" />
+                        <h:outputText value="#{topSalesController.selectedItem.priceCents}"/>
+
+                        <h:outputText value="Puhelin: " />
+                        <h:outputText value="$#{topSalesController.selectedItem.phone}" />
+                        <h:outputText value="Sähköposti: " />
+                        <h:outputText value="$#{topSalesController.selectedItem.email}" />
+                    </p:panelGrid>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>   
+    </h:body>
+</html>
+

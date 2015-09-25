@@ -1,0 +1,37 @@
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	     xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	     xsi:schemaLocation="http://research.sun.com/wadl/2006/10 
+                    https://wadl.dev.java.net/wadl20061109.xsd"
+	     xmlns="http://research.sun.com/wadl/2006/10">
+  
+    <resources base="http://mepa-store-api.herokuapp.com/">
+        <resource path="marketads">
+            <method name="GET" id="getAllMarketAds">
+                <request>                                        
+                </request>
+                <response>
+                    <representation mediaType="application/json"/>
+                </response>
+            </method>
+        </resource>
+        <resource path="marketads/{id}">
+			<method name="GET" id="getImage">
+				<request>    
+					<param style="template" name="id" required="true"/>				
+				</request>
+				<response>
+					<representation mediaType="application/json"/>
+				</response>
+			</method>			
+		</resource>
+        <resource path="images">
+			<method name="GET" id="getAllImages">
+				<request>                                        
+				</request>
+				<response>
+					<representation mediaType="application/json"/>
+				</response>
+			</method>
+        </resource>
+    </resources>
+</application>
