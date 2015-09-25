@@ -24,16 +24,15 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import oh3ebf.topsales.service.MepaStoreService;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class TopSalesController implements Serializable {
 
     @EJB
     private MepaStoreService px;
-
     private static final long serialVersionUID = 1L;
     private SalesItem selectedItem;
 
@@ -61,5 +60,6 @@ public class TopSalesController implements Serializable {
 
     public void setSelectedItem(SalesItem selectedItem) {
         this.selectedItem = selectedItem;
+        System.out.print(selectedItem.getTitle());
     }
 }
