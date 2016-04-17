@@ -1,5 +1,4 @@
 /**
- * *********************************************************
  * Software: Top Sales
  *
  * Module: Sales item class
@@ -12,7 +11,7 @@
  *
  * Date creation : 22.9.2015
  *
- **********************************************************
+ *
  */
 package oh3ebf.topsales.ws;
 
@@ -22,14 +21,13 @@ public class SalesItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String id;
-    private String title;
-    private String description;
-    private int priceCents;
-    private String imageUrl;
-    private String thumbnailUrl;
-    private String email;
-    private String phone;
-    
+    private String title = "";
+    private String description = "";
+    private int priceCents = 0;
+    private String imageUrl = "";
+    private String thumbnailUrl = "";
+    private String email = "";
+    private String phone = "";
 
     public String getId() {
         return id;
@@ -80,10 +78,10 @@ public class SalesItem implements Serializable {
     }
 
     public void setThumbnailUrl(String thumbnailUrl) {
-        if (thumbnailUrl == null || thumbnailUrl.toLowerCase().equals("null") || thumbnailUrl.isEmpty()) {            
+        if (thumbnailUrl == null || thumbnailUrl.toLowerCase().equals("null") || thumbnailUrl.isEmpty()) {
             this.thumbnailUrl = "none";
         } else {
-            this.thumbnailUrl = thumbnailUrl;                 
+            this.thumbnailUrl = thumbnailUrl;
         }
     }
 

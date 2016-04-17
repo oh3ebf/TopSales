@@ -16,9 +16,12 @@
             <p:dataTable id="sales-list" value="#{topSalesController.salesItems}" var="item" 
                          selectionMode="single"
                          selection="#{topSalesController.selectedItem}" rowKey="#{item.id}" 
-                         paginator="true" rows="20">                             
-                <p:column headerText="Ilmoitukset">      
-
+                         paginator="true" rows="20">         
+                <f:facet name="header">
+                    Ilmoitukset                    
+                    <p:commandButton value="Lisää ilmoitus" onclick="PF('newSalesItemDialog').show()"></p:commandButton>
+                </f:facet>
+                <p:column>      
                     <p:panelGrid style="width:100%" styleClass="ui-noborder style">
                         <p:row>
                             <p:column style="width:140px">
@@ -55,13 +58,13 @@
                 </p:column>
                 <p:ajax event="rowSelect" process="@parent" update=":sales_detail_form" oncomplete="PF('market_dialog').show()"/>
             </p:dataTable>
-
         </h:form>
-
+        <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true"/>  
         <p:dialog header="Ilmoitus" widgetVar="market_dialog" modal="true" showEffect="fade" 
                   hideEffect="fade" resizable="false" position="center">
             <p:outputPanel id="sales_detail_form" style="text-align:center;">
-                <p:panelGrid  columns="2" rendered="#{not empty topSalesController.selectedItem}" columnClasses="label, value">
+                <p:panelGrid  columns="2" rendered="#{not empty topSalesController.selectedItem}" 
+                              columnClasses="label, value" styleClass="ui-noborder style">
                     <f:facet name="header">
                         <ui:fragment rendered="#{topSalesController.selectedItem.thumbnailUrl != 'none'}">
                             <img src="#{topSalesController.selectedItem.imageUrl}" height="256" width="256"></img>
@@ -81,12 +84,98 @@
                     <h:outputText value="#{topSalesController.selectedItem.priceCents}"/>
 
                     <h:outputText value="Puhelin: " />
-                    <h:outputText value="$#{topSalesController.selectedItem.phone}" />
+                    <h:outputText value="#{topSalesController.selectedItem.phone}" />
+
                     <h:outputText value="Sähköposti: " />
-                    <h:outputText value="$#{topSalesController.selectedItem.email}" />
+                    <h:outputText value="#{topSalesController.selectedItem.email}" />
                 </p:panelGrid>
             </p:outputPanel>
         </p:dialog> 
+
+        <p:dialog id="new-sales-item-dialog" header="Uusi ilmoitus" widgetVar="newSalesItemDialog" 
+                  modal="true" showEffect="fade"
+                  hideEffect="fade" resizable="true" position="center" width="80%" >          
+            <p:ajax event="close" listener="#{topSalesController.dialogClose(event)}" />
+            <p:outputPanel id="new_sales_item_panel" style="text-align:center;">                
+                <h:form id="sales-item-file-form">
+                    <p:fileUpload value="#{topSalesController.file}" mode="advanced" 
+                                  fileUploadListener="#{topSalesController.fileUploadListener}"
+                                  fileLimit="1" fileLimitMessage="Vain yksi tiedosto lataus sallittu"
+                                  sizeLimit="300000" invalidSizeMessage="Liian suuri tiedosto"></p:fileUpload>
+                </h:form>
+                <h:form id="sales-item-input-form">
+                    <p:panelGrid id="sales-item-input-grid" columns="3" columnClasses="label, value, error" styleClass="ui-noborder style">                        
+
+                        <p:outputLabel value="Myynti kohde: " for="new-item-title"/>
+                        <p:inputText id="new-item-title" required="true" 
+                                     size="30" value="#{topSalesController.itemToAdd.title}"
+                                     validatorMessage="Kohteen otsikko liian lyhyt."
+                                     requiredMessage="Kohteen otsikko puuttuu.">
+                            <f:validateLength minimum="5" />
+                            <p:ajax event="change"/>
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="new-item-title" showDetail="false"/>
+
+                        <p:outputLabel value="Kuvaus: " for="new-item-description"/>
+                        <p:inputText id="new-item-description" required="true" 
+                                     size="30" value="#{topSalesController.itemToAdd.description}"
+                                     validatorMessage="Kohteen kuvaus liian lyhyt."
+                                     requiredMessage="Kohteen kuvaus puuttuu.">
+                            <f:validateLength minimum="5" />
+                            <p:ajax event="change"/>
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="new-item-description" />
+
+                        <p:outputLabel value="Hinta:" for="new-item-price"/>
+                        <p:inputText id="new-item-price" required="true" 
+                                     size="30" value="#{topSalesController.itemToAdd.priceCents}"
+
+                                     requiredMessage="Kohteen hinta puuttuu."
+                                     converterMessage="Virheellinen hinta.">
+                            <f:convertNumber pattern="#,###,##0.00"/>
+                            <p:ajax event="change"/>
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="new-item-price" />
+
+                        <p:outputLabel value="Puhelin: " for="new-item-phone"/>
+                        <p:inputText id="new-item-phone" required="true" 
+                                     size="30" value="#{topSalesController.itemToAdd.phone}"
+                                     validatorMessage="Puhelin numero liian lyhyt." 
+                                     requiredMessage="Puhelin numero puuttuu.">
+                            <f:validateLength minimum="6" />
+                            <p:ajax event="change"/>
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>
+                        <p:message for="new-item-phone" />
+
+                        <p:outputLabel value="Sähköposti: " for="new-item-email"/>
+                        <p:inputText  id="new-item-email" required="true" label="email" size="30" type="email"
+                                      requiredMessage="Sähköposti puuttuu."
+                                      validatorMessage="Virheellinen osoite." 
+                                      value="#{topSalesController.itemToAdd.email}">
+                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            <p:ajax event="change"/>
+                            <p:clientValidator event="keyup"/>
+                        </p:inputText>                        
+                        <p:message for="new-item-email" />
+                    </p:panelGrid>
+                    <p:commandButton value="Hylkää" 
+                                     process="@this"
+                                     onclick="PF('newSalesItemDialog').hide()"
+                                     update="sales-item-input-form">
+
+                        <p:resetInput target="sales-item-input-form" />
+                    </p:commandButton>
+                    <p:commandButton value="Hyväksy" 
+                                     validateClient="true"
+                                     action="#{topSalesController.addSalesItem()}"
+                                     ajax="false"/>
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
     </h:body>
 </html>
 

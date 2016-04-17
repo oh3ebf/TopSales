@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/controller/TopSalesController.java</file>
+            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/web/index.xhtml</file>
+            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/ws/MepaStoreMarketAds.java</file>
+            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/service/MepaStoreService.java</file>
+            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/ws/ImageResponse.java</file>
+            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/ws/SalesItem.java</file>
+            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/exceptions/JsonParseFailedException.java</file>
+            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/ws/MepaStoreImages.java</file>
+        </group>
     </open-files>
 </project-private>
