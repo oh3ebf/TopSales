@@ -30,9 +30,11 @@ This is not an Maven project, so you need download and install dependency packag
 - Jersey 2.22 
     
 Download PrimeFaces from here: http://www.primefaces.org/downloads
+
 Select community edition primefaces-5.2.jar to download
     
 Download Jersey from here: https://jersey.java.net/download.html
+
 I have been using Jersey JAX-RS 2.0 RI bundle which contains all needed JAR:s
 
 Add these as libraries in Netbeans. I have been using following library names:
