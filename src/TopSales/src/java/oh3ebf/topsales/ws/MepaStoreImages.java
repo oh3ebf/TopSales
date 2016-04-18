@@ -23,6 +23,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import oh3ebf.topsales.exceptions.RequestFailedException;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -45,7 +46,7 @@ public class MepaStoreImages {
 
     private final WebTarget webTarget;
     private final Client client;
-    
+
     private static final String BASE_URI = "http://mepa-store-api.herokuapp.com/";
 
     public MepaStoreImages() {
@@ -66,15 +67,16 @@ public class MepaStoreImages {
     /**
      * @param f
      * @return response object (instance of responseType class)
+     * @throws oh3ebf.topsales.exceptions.RequestFailedException
      */
-    public String addImage(File f) throws ClientErrorException {
-       
+    public String addImage(File f) throws ClientErrorException, RequestFailedException {
+
         Invocation.Builder invocationBuilder = null;
         Response response = null;
-       
+
         FileDataBodyPart fileDataBodyPart = null;
         FormDataMultiPart formDataMultiPart = null;
-        
+
         int responseCode;
         String responseMessageFromServer = null;
         String responseString = null;
@@ -86,12 +88,12 @@ public class MepaStoreImages {
             formDataMultiPart.bodyPart(fileDataBodyPart);
 
             // invoke service
-            invocationBuilder = webTarget.request();            
+            invocationBuilder = webTarget.request();
             response = invocationBuilder.post(Entity.entity(formDataMultiPart, MediaType.MULTIPART_FORM_DATA));
 
             // get response code
             responseCode = response.getStatus();
-            System.out.println("Response code: " + responseCode);
+            //System.out.println("Response code: " + responseCode);
 
             if (response.getStatus() != 200) {
                 throw new RuntimeException("Failed with HTTP error code : " + responseCode);
@@ -99,28 +101,38 @@ public class MepaStoreImages {
 
             // get response message
             responseMessageFromServer = response.getStatusInfo().getReasonPhrase();
-            System.out.println("ResponseMessageFromServer: " + responseMessageFromServer);
+            //System.out.println("ResponseMessageFromServer: " + responseMessageFromServer);
 
             // get response string
             responseString = response.readEntity(String.class);
-            
+
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new RequestFailedException("Image upload request failed", ex);
         } finally {
             // release resources, if any
-            fileDataBodyPart.cleanup();
-            formDataMultiPart.cleanup();
-            //formDataMultiPart.close();
-            response.close();
-            client.close();
+            if (fileDataBodyPart != null) {
+                fileDataBodyPart.cleanup();
+            }
+
+            if (formDataMultiPart != null) {
+                formDataMultiPart.cleanup();
+            }
+
+            if (response != null) {
+                response.close();
+            }
+
+            if (client != null) {
+                client.close();
+            }
         }
-        
+
         return responseString;
     }
 
     /**
      * Function close web target
-     * 
+     *
      */
     public void close() {
         client.close();

@@ -19,7 +19,10 @@
                          paginator="true" rows="20">         
                 <f:facet name="header">
                     Ilmoitukset                    
-                    <p:commandButton value="Lisää ilmoitus" onclick="PF('newSalesItemDialog').show()"></p:commandButton>
+                    <p:commandButton value="Lisää ilmoitus" onclick="PF('newSalesItemDialog').show()"
+                                     update="sales-item-input-form">
+                        
+                    </p:commandButton>
                 </f:facet>
                 <p:column>      
                     <p:panelGrid style="width:100%" styleClass="ui-noborder style">
@@ -81,7 +84,9 @@
                     <h:outputText value="#{topSalesController.selectedItem.description}" />
 
                     <h:outputText value="Hinta:" />
-                    <h:outputText value="#{topSalesController.selectedItem.priceCents}"/>
+                    <h:outputText value="#{topSalesController.selectedItem.priceCents}">
+                        <f:convertNumber currencySymbol="&euro;" currencyCode="EUR" type="currency" locale="FI-fi"/>
+                    </h:outputText>
 
                     <h:outputText value="Puhelin: " />
                     <h:outputText value="#{topSalesController.selectedItem.phone}" />
@@ -101,7 +106,10 @@
                     <p:fileUpload value="#{topSalesController.file}" mode="advanced" 
                                   fileUploadListener="#{topSalesController.fileUploadListener}"
                                   fileLimit="1" fileLimitMessage="Vain yksi tiedosto lataus sallittu"
-                                  sizeLimit="300000" invalidSizeMessage="Liian suuri tiedosto"></p:fileUpload>
+                                  sizeLimit="300000" invalidSizeMessage="Liian suuri tiedosto." 
+                                  cancelLabel="Hylkää" uploadLabel="Lataa" label="Valitse"
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                                  invalidFileMessage="Tiedosto virhe. (sallitut: jpg, gif, png)" ></p:fileUpload>
                 </h:form>
                 <h:form id="sales-item-input-form">
                     <p:panelGrid id="sales-item-input-grid" columns="3" columnClasses="label, value, error" styleClass="ui-noborder style">                        
@@ -128,13 +136,13 @@
                         </p:inputText>
                         <p:message for="new-item-description" />
 
-                        <p:outputLabel value="Hinta:" for="new-item-price"/>
+                        <p:outputLabel value="Hinta: " for="new-item-price">&#8364;</p:outputLabel>
                         <p:inputText id="new-item-price" required="true" 
                                      size="30" value="#{topSalesController.itemToAdd.priceCents}"
 
                                      requiredMessage="Kohteen hinta puuttuu."
                                      converterMessage="Virheellinen hinta.">
-                            <f:convertNumber pattern="#,###,##0.00"/>
+                            <f:convertNumber pattern="#,###,##0.00"/>                            
                             <p:ajax event="change"/>
                             <p:clientValidator event="keyup"/>
                         </p:inputText>
@@ -143,8 +151,8 @@
                         <p:outputLabel value="Puhelin: " for="new-item-phone"/>
                         <p:inputText id="new-item-phone" required="true" 
                                      size="30" value="#{topSalesController.itemToAdd.phone}"
-                                     validatorMessage="Puhelin numero liian lyhyt." 
-                                     requiredMessage="Puhelin numero puuttuu.">
+                                     validatorMessage="Puhelinnumero liian lyhyt." 
+                                     requiredMessage="Puhelinnumero puuttuu.">
                             <f:validateLength minimum="6" />
                             <p:ajax event="change"/>
                             <p:clientValidator event="keyup"/>

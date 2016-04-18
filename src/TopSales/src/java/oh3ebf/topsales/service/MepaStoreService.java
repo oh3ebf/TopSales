@@ -21,6 +21,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import oh3ebf.topsales.exceptions.JsonParseFailedException;
+import oh3ebf.topsales.exceptions.RequestFailedException;
 import oh3ebf.topsales.ws.ImageResponse;
 import oh3ebf.topsales.ws.MepaStoreImages;
 import oh3ebf.topsales.ws.SalesItem;
@@ -46,7 +47,6 @@ public class MepaStoreService {
     /**
      * Function reloads data from REST API
      *
-     * @throws oh3ebf.topsales.exceptions.JsonParseFailedException
      */
     public void revalidateData() {
         // get newest data
@@ -108,8 +108,9 @@ public class MepaStoreService {
      * @param imageFile to store
      * @return result of save operation
      * @throws JsonParseFailedException
+     * @throws oh3ebf.topsales.exceptions.RequestFailedException
      */
-    public ImageResponse addImage(File imageFile) throws JsonParseFailedException {
+    public ImageResponse addImage(File imageFile) throws JsonParseFailedException, RequestFailedException {
         String response = images.addImage(imageFile);
 
         try {
@@ -124,8 +125,8 @@ public class MepaStoreService {
             img.setError(json.optString("error"));
 
             return img;
-        } catch (Exception ex) {
+        } catch (JSONException ex) {
             throw new JsonParseFailedException("failed to parse image response", ex);
-        }
+        } 
     }
 }

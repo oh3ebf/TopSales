@@ -5,11 +5,7 @@
         <group>
             <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/controller/TopSalesController.java</file>
             <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/web/index.xhtml</file>
-            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/ws/MepaStoreMarketAds.java</file>
             <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/service/MepaStoreService.java</file>
-            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/ws/ImageResponse.java</file>
-            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/ws/SalesItem.java</file>
-            <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/exceptions/JsonParseFailedException.java</file>
             <file>file:/mnt/disks/projects/java/TopSales/src/TopSales/src/java/oh3ebf/topsales/ws/MepaStoreImages.java</file>
         </group>
     </open-files>

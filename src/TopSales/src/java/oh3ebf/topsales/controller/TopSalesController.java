@@ -31,6 +31,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.ClientErrorException;
 import oh3ebf.topsales.exceptions.JsonParseFailedException;
+import oh3ebf.topsales.exceptions.RequestFailedException;
 import oh3ebf.topsales.service.MepaStoreService;
 import oh3ebf.topsales.ws.ImageResponse;
 import org.primefaces.context.RequestContext;
@@ -114,15 +115,7 @@ public class TopSalesController implements Serializable {
         this.fileName = "";
         this.ItemToAdd = new SalesItem();
     }
-
-    /*
-     TODO
-    valuutta merkit
-     poikkeus käsittely
-     viestit käyttäjälle
-     kommentit
-     asennusohje
-     */
+   
     /**
      * function adds new sales item to database
      *
@@ -140,7 +133,9 @@ public class TopSalesController implements Serializable {
                 ItemToAdd.setImageUrl(img.getImageUrl());
                 ItemToAdd.setThumbnailUrl(img.getThumbnailUrl());
             } catch (JsonParseFailedException ex) {
-                showMessage(FacesMessage.SEVERITY_ERROR, null, "Kuvan tallennus virhe! ", this.fileName + " kuvan tallentaminen epäonnistui.");
+                showMessage(FacesMessage.SEVERITY_ERROR, null, "Tietosisältö virhe! ", "Tallennuspyyntö vastauksen tiedot virheellisiä.");
+            } catch (RequestFailedException ex) {
+                showMessage(FacesMessage.SEVERITY_ERROR, null, "Kuvan tallennus virhe! ", "Tiedoston " + this.fileName + " tallentaminen epäonnistui.");
             }
         }
 
@@ -150,18 +145,29 @@ public class TopSalesController implements Serializable {
             showMessage(FacesMessage.SEVERITY_ERROR, null, "Ilmoituksen tallennus virhe! ", "Ilmoituksen tallennus epäonnistui.");
         }
 
-        RequestContext.getCurrentInstance().execute("PF('newSalesItemDialog').hide();");
+        // remove temporary image file
         deleteFile();
+
+        // close dialog
+        RequestContext.getCurrentInstance().execute("PF('newSalesItemDialog').hide();");
 
         // clear variables after cancel
         this.fileName = "";
         this.ItemToAdd = new SalesItem();
     }
 
+    /**
+     * 
+     * @return file
+     */
     public UploadedFile getFile() {
         return file;
     }
 
+    /**
+     * Function sets file
+     * @param file 
+     */
     public void setFile(UploadedFile file) {
         this.file = file;
     }
@@ -232,7 +238,7 @@ public class TopSalesController implements Serializable {
                     return false;
                 }
 
-            } catch (Exception e) {
+            } catch (SecurityException ex) {
                 showMessage(FacesMessage.SEVERITY_ERROR, null, "Tiedoston poisto virhe! ", this.fileName + " poistaminen epäonnistui.");
             }
         }
