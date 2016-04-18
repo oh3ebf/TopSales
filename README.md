@@ -30,4 +30,9 @@ I have been using Jersey JAX-RS 2.0 RI bundle which contains all needed JAR:s
 Add these as libraries in Netbeans. I have been using following library names:
 
 Jersey 2.22
+
 PrimeFaces-5.2
+
+After these step check out code and it should open cleanly in IDE. There is no need for any configuration. 
+Just point project name and select Run.
+
