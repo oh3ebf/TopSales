@@ -44,5 +44,5 @@ Jersey 2.22
 PrimeFaces-5.2
 
 After these steps check out code and it should open cleanly in IDE. There is no need for any configuration. 
-Just point project name and select Run. if everything went ok, web browser window should open containing running application.
+Just point project name and select Run. If everything went ok, web browser window should open containing running application.
 
