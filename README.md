@@ -18,8 +18,8 @@ Here you can find detailed instructions for installing Netbeans and Glassfish: h
 This is not an Maven project, so you need download and install dependency packages.
 
  Dependencies
-    - PrimeFaces 5.2
-    - Jersey 2.22 
+- PrimeFaces 5.2
+- Jersey 2.22 
     
     Download PrimeFaces from here: http://www.primefaces.org/downloads
     Select community edition primefaces-5.2.jar to download
