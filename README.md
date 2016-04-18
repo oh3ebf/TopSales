@@ -3,6 +3,14 @@ Market place demo application using ready made REST API and Primefaces framework
 
 ## Installation instructions:
 
+### Quick setup from ready made build
+
+There is ready made war file in this repository. You will find it from src/TopSales/dist folder.
+I hope you have already running Glassfish server environment. If not, download and install it some computer.
+Open admin page in your favorite web browser Default admin port is 4848. 
+Deploy this war file and set context path regarding your environment and application name TopSales.
+Now you should be able to open TopSales in your browser.
+
 ### Development environment:
 
 Download JDK1.8 and install it.
