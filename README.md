@@ -28,5 +28,6 @@ Download Jersey from here: https://jersey.java.net/download.html
 I have been using Jersey JAX-RS 2.0 RI bundle which contains all needed JAR:s
 
 Add these as libraries in Netbeans. I have been using following library names:
+
 Jersey 2.22
 PrimeFaces-5.2
