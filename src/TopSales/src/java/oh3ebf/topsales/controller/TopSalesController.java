@@ -23,6 +23,8 @@ import java.io.OutputStream;
 import oh3ebf.topsales.ws.SalesItem;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -51,6 +53,7 @@ public class TopSalesController implements Serializable {
     private UploadedFile file;
     private String fileName = "";
     private static final String STORAGE_PATH = "/tmp/";
+    private static final Logger logger = Logger.getLogger(TopSalesController.class.getName());
 
     /**
      * Creates a new instance of TopSalesController
@@ -115,7 +118,7 @@ public class TopSalesController implements Serializable {
         this.fileName = "";
         this.ItemToAdd = new SalesItem();
     }
-   
+
     /**
      * function adds new sales item to database
      *
@@ -134,8 +137,10 @@ public class TopSalesController implements Serializable {
                 ItemToAdd.setThumbnailUrl(img.getThumbnailUrl());
             } catch (JsonParseFailedException ex) {
                 showMessage(FacesMessage.SEVERITY_ERROR, null, "Tietosisältö virhe! ", "Tallennuspyyntö vastauksen tiedot virheellisiä.");
+                logger.log(Level.SEVERE, "Error failed to parse JSON: {0}", ex.getMessage());
             } catch (RequestFailedException ex) {
                 showMessage(FacesMessage.SEVERITY_ERROR, null, "Kuvan tallennus virhe! ", "Tiedoston " + this.fileName + " tallentaminen epäonnistui.");
+                logger.log(Level.SEVERE, "Error image post request failed: {0}", ex.getMessage());
             }
         }
 
@@ -143,6 +148,7 @@ public class TopSalesController implements Serializable {
             px.addMarketAds(ItemToAdd);
         } catch (ClientErrorException ex) {
             showMessage(FacesMessage.SEVERITY_ERROR, null, "Ilmoituksen tallennus virhe! ", "Ilmoituksen tallennus epäonnistui.");
+            logger.log(Level.SEVERE, "Error market ad post request failed: {0}", ex.getMessage());
         }
 
         // remove temporary image file
@@ -157,7 +163,7 @@ public class TopSalesController implements Serializable {
     }
 
     /**
-     * 
+     *
      * @return file
      */
     public UploadedFile getFile() {
@@ -166,7 +172,8 @@ public class TopSalesController implements Serializable {
 
     /**
      * Function sets file
-     * @param file 
+     *
+     * @param file
      */
     public void setFile(UploadedFile file) {
         this.file = file;
@@ -186,6 +193,7 @@ public class TopSalesController implements Serializable {
             copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
         } catch (IOException ex) {
             showMessage(FacesMessage.SEVERITY_ERROR, null, "Lataus epäonnistui! ", this.fileName + " tallennus epäonnistui.");
+            logger.log(Level.SEVERE, "Error file upload failed: {0}", ex.getMessage());
         }
 
         showMessage(FacesMessage.SEVERITY_INFO, null, "Lataus onnistui! ", this.fileName + " tallennettu.");
@@ -215,8 +223,9 @@ public class TopSalesController implements Serializable {
             out.flush();
             out.close();
 
-        } catch (IOException e) {
+        } catch (IOException ex) {
             showMessage(FacesMessage.SEVERITY_ERROR, null, "Tiedoston kopiointi virhe! ", this.fileName + " kopiointi epäonnistui.");
+            logger.log(Level.SEVERE, "Error file copy failed: {0}", ex.getMessage());
         }
     }
 
@@ -240,6 +249,7 @@ public class TopSalesController implements Serializable {
 
             } catch (SecurityException ex) {
                 showMessage(FacesMessage.SEVERITY_ERROR, null, "Tiedoston poisto virhe! ", this.fileName + " poistaminen epäonnistui.");
+                logger.log(Level.SEVERE, "Error file delete failed: {0}", ex.getMessage());
             }
         }
 
